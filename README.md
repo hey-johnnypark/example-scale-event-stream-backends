@@ -1,3 +1,3 @@
 # Test
 
-![](assets/general-challenge.png)
+![alt](assets/general-challenge.png)
