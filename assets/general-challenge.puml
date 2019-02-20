@@ -7,35 +7,49 @@ skinparam packageStyle rectangle
 actor user
 
 
+
 rectangle Gateway {
-  user -- (domain): [2a] subscribe
+  user --> (domain): [2a] subscribe
 
 }
+
+note bottom
+  Subscription
+  requests are
+  distributed
+  round robin
+endnote
 
 
 rectangle Backend {
-  component host_1
-  component host_2
-  component host_n
+  component app_instance_01
+  component app_instance_02
+  component app_instance_n
 
-  (domain) -- host_1: [2b] subscribe
+  (domain) --> app_instance_02: [2b] subscribe
 
 }
+
 
 
 
 
 component MessageBroker
 
-host_1 -- MessageBroker: [1] subscribe
-host_2 -- MessageBroker: [1] subscribe
-host_n -- MessageBroker: [1] subscribe
+app_instance_01 --> MessageBroker: [1] subscribe
+app_instance_02 --> MessageBroker: [1] subscribe
+app_instance_n --> MessageBroker: [1] subscribe
+
+note bottom
+  Messages are distributed
+  round robin
+endnote
 
 component EventSource
 
 (EventSource) -up-> MessageBroker: [3] message (User)
-MessageBroker --> host_n: [3] message ( User )
+MessageBroker --> app_instance_n: [3] message ( User )
 
-host_n -up-> (?)
+app_instance_n -up-> (?)
 
 @enduml

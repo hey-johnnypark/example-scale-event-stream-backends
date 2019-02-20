@@ -1,3 +1,3 @@
 # Test
 
-![](assets/web-async-sequence-diagram.png)
+![](assets/general-challenge.png)
