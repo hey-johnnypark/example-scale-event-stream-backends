@@ -1,0 +1,41 @@
+@startuml
+
+left to right direction
+
+skinparam packageStyle rectangle
+
+actor user
+
+
+rectangle Gateway {
+  user -- (domain): [2a] subscribe
+
+}
+
+
+rectangle Backend {
+  component host_1
+  component host_2
+  component host_n
+
+  (domain) -- host_1: [2b] subscribe
+
+}
+
+
+
+
+component MessageBroker
+
+host_1 -- MessageBroker: [1] subscribe
+host_2 -- MessageBroker: [1] subscribe
+host_n -- MessageBroker: [1] subscribe
+
+component EventSource
+
+(EventSource) -up-> MessageBroker: [3] message (User)
+MessageBroker --> host_n: [3] message ( User )
+
+host_n -up-> (?)
+
+@enduml
