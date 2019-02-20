@@ -1,0 +1,25 @@
+version: '3'
+services:
+
+  backend:
+    # You need to build the image yourself -> websocket-backend folder
+    image: "websocket-backend"
+    links:
+    - kafka
+    depends_on:
+      - kafka
+  nginx:
+    ports:
+    - "8080:8080"
+    image: "nginx"
+    links:
+      - backend
+    volumes:
+      - ${PWD}/nginx.conf:/etc/nginx/conf.d/app.conf:ro
+  kafka:
+    image: johnnypark/kafka-zookeeper:2.1.0
+    ports:
+    - "9092:9092"
+    environment:
+      - ADVERTISED_HOST=kafka
+      - NUM_PARTITIONS=10

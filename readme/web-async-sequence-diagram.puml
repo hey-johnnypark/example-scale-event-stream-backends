@@ -1,0 +1,36 @@
+@startuml
+
+actor User
+
+group Init STOMP over Websocket Session
+
+User -> nginx: CONNECT
+nginx -> WebsocketRelay: CONNECT
+WebsocketRelay --> nginx: CONNECTED
+nginx -> User: CONNECTED
+User -> nginx: SUBSCRIBE user queue
+nginx -> WebsocketRelay: SUBSCRIBE user queue
+
+end
+
+box "Backend" #LightBlue
+	participant WebsocketRelay
+	participant NotificationsDispatcherService
+	participant Hazelcast
+  participant NotificationsListenerService
+end box
+
+group Receive Notification from Kafka
+
+Kafka -> NotificationsListenerService: UserNotification
+NotificationsListenerService -> NotificationsDispatcherService: UserNotification
+NotificationsDispatcherService -> Hazelcast: Publish(UserNotification)
+Hazelcast -> NotificationsDispatcherService: UserNotification
+NotificationsDispatcherService -> WebsocketRelay: UserNotification
+WebsocketRelay -> nginx: UserNotification
+nginx -> User: UserNotification
+
+end
+
+
+@enduml
