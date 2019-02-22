@@ -37,6 +37,6 @@ cd ..
 
 ### Run
 ````bash
-docker-compose up --scale backend=3
+docker-compose up
 ````
 
