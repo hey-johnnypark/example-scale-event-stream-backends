@@ -17,8 +17,6 @@ public class NotificationsListenerService {
   @Autowired
   private NotificationsDispatcherService ndService;
 
-
-
   private ObjectMapper objectMapper = new ObjectMapper();
 
   @KafkaListener(topics = "notifications")

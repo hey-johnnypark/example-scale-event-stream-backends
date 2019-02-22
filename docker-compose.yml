@@ -1,21 +1,43 @@
 version: '3'
 services:
 
-  backend:
-    # You need to build the image yourself -> websocket-backend folder
+  # You need to build the image yourself -> websocket-backend folder
+  backend1:
+
     image: "websocket-backend"
     links:
     - kafka
     depends_on:
       - kafka
+
+  backend2:
+
+    image: "websocket-backend"
+    links:
+    - kafka
+    depends_on:
+    - kafka
+
+  backend3:
+
+    image: "websocket-backend"
+    links:
+    - kafka
+    depends_on:
+    - kafka
+
+
   nginx:
     ports:
     - "8080:8080"
     image: "nginx"
     links:
-      - backend
+      - backend1
+      - backend2
+      - backend3
     volumes:
       - ${PWD}/nginx.conf:/etc/nginx/conf.d/app.conf:ro
+
   kafka:
     image: johnnypark/kafka-zookeeper:2.1.0
     ports:
