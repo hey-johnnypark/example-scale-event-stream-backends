@@ -21,7 +21,7 @@ note bottom
 endnote
 
 
-rectangle Backend {
+rectangle "Backend API" {
   component app_instance_01
   component app_instance_02
   component app_instance_n
@@ -32,8 +32,7 @@ rectangle Backend {
 
 
 
-
-
+rectangle "Event Streams" {
 component MessageBroker
 
 app_instance_01 --> MessageBroker: [1] subscribe
@@ -47,9 +46,15 @@ endnote
 
 component EventSource
 
-(EventSource) -up-> MessageBroker: [3] message (User)
-MessageBroker --> app_instance_n: [3] message ( User )
+(EventSource) -up-> MessageBroker: [3] Event (User)
+MessageBroker --> app_instance_n: [3] Event ( User )
+
+}
 
 app_instance_n -up-> (?)
+note bottom
+  app_instance_n does not
+  hold the open connection
+endnote
 
 @enduml
