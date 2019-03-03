@@ -5,16 +5,18 @@ actor User
 group Init STOMP over Websocket Session
 
 User -> nginx: CONNECT
-nginx -> WebsocketRelay: CONNECT
-WebsocketRelay --> nginx: CONNECTED
+nginx -> WebsocketEventListenerService: CONNECT
+WebsocketEventListenerService --> nginx: CONNECTED
+WebsocketEventListenerService --> NotificationsDispatcherService: sessionConnected()
+NotificationsDispatcherService --> Hazelcast: addMessageListener(this)
 nginx -> User: CONNECTED
 User -> nginx: SUBSCRIBE user queue
-nginx -> WebsocketRelay: SUBSCRIBE user queue
+nginx -> WebsocketEventListenerService: SUBSCRIBE user queue
 
 end
 
 box "Backend" #LightBlue
-	participant WebsocketRelay
+	participant WebsocketEventListenerService
 	participant NotificationsDispatcherService
 	participant Hazelcast
   participant NotificationsListenerService
@@ -26,8 +28,8 @@ Kafka -> NotificationsListenerService: UserNotification
 NotificationsListenerService -> NotificationsDispatcherService: UserNotification
 NotificationsDispatcherService -> Hazelcast: Publish(UserNotification)
 Hazelcast -> NotificationsDispatcherService: UserNotification
-NotificationsDispatcherService -> WebsocketRelay: UserNotification
-WebsocketRelay -> nginx: UserNotification
+NotificationsDispatcherService -> WebsocketEventListenerService: UserNotification
+WebsocketEventListenerService -> nginx: UserNotification
 nginx -> User: UserNotification
 
 end

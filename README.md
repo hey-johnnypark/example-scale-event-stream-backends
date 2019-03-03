@@ -17,7 +17,7 @@ A User receives messages through a website in real-time (Push instead of Pull). 
 
 In this publish subscribe scenario the challenge is to router the messages for the user to those backend nodes holding an open connection. 
 
-## Solution variant: Shared state via Hazelcast
+## Solution Approach: Shared state via Hazelcast
 
 ![Challenge](assets/web-async-sequence-diagram.png)
 
